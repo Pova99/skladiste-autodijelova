@@ -1,6 +1,6 @@
 #pragma once
 
-static char* filename = "cars.bin";
+static char* filename = "parts.bin";
 
 typedef enum {
     ENGINE,
@@ -20,4 +20,11 @@ typedef struct {
     PART_CATEGORY category;
 } PART;
 
-int menu();
+int menu(FILE*);
+void create_parts(FILE*, PART*);
+void read_parts(FILE*);
+void update_parts(FILE*, const char*);
+void delete_parts(FILE*, const char*);
+void find_part(FILE*, const char*, PART*);
+
+PART* enter_parts_info();

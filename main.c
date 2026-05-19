@@ -4,13 +4,21 @@
 
 int main(void) {
 
+	FILE* fp = fopen(filename, "rb+");
+
+	if (fp == NULL) {
+
+		fp = fopen(filename, "wb+");
+	}
+
 	int condition = 1;
 
 	while (condition) {
 
-		condition = menu();
+		condition = menu(fp);
 	}
 
+	fclose(fp);
 	printf("Zavrsetak programa!\n");
 
 	return 0;

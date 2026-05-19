@@ -18,7 +18,13 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="func.c">
+    <ClCompile Include="menu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cruid.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="functions_misc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

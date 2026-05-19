@@ -127,7 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="func.c" />
+    <ClCompile Include="cruid.c" />
+    <ClCompile Include="functions_misc.c" />
+    <ClCompile Include="menu.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
