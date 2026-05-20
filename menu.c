@@ -8,6 +8,7 @@
 int menu(FILE* fp) {
 
 	int num = 0;
+	PART* p = NULL;
 
 	printf("==============");
 	printf("Odaberite jednu od ponudenih opcija:");
@@ -29,13 +30,37 @@ int menu(FILE* fp) {
 	case 1: {
 
 		PART* p = enter_parts_info();
-		create_parts(fp, p);
+		create_parts(fp, p, &num);
+		if (p != NULL) {
+
+			free(p);
+		}
 		break;
 	}
 		  
-	case 2:; break;
-	case 3:; break;
-	case 4: read_parts(fp); break;
+	case 2: {
+		
+		char search[CAT_LEN] = { 0 };
+
+		printf("Pretrazivanje: ");
+		scanf("%31s", search);
+
+		p = get_all_data(fp, &num);
+
+		int found = find_part(fp, search, p);
+
+		if (!found) {
+
+			printf("Kataloski broj '%s' ne postoji u bazi podataka!", search);
+		}
+	}
+
+	case 3: ; break;
+	case 4: {
+	
+		read_parts(fp, p);
+		break;
+	}
 	case 5:; break;
 	case 6: return 0;
 
