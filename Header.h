@@ -38,11 +38,11 @@ typedef struct {
 
 int menu(FILE*);
 void create_parts(FILE*, PART*);
-void* load_parts(FILE*);
-void read_parts(FILE*, PART*);
+PART* load_parts(FILE*);
+void read_parts(PART*);
 void* find_parts(FILE*, PART*);
 void update_parts(FILE*, PART*);
-void delete_parts(const char*, PART*);
+void delete_parts(FILE*, PART*, PART*);
 
 
 PART* enter_parts_info();

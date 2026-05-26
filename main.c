@@ -9,6 +9,8 @@ int main(void) {
 	if (fp == NULL) {
 
 		fp = fopen(filename, "wb+");
+		int zero = 0;
+		fwrite(&zero, sizeof(int), 1, fp);
 	}
 
 	int condition = 1;

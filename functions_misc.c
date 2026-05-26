@@ -96,7 +96,7 @@ void* secure_load_parts(FILE* fp, PART* p) {
 		p = NULL;
 	}
 
-	p = (PART*)load_parts(fp);
+	p = load_parts(fp);
 
 	if (p == NULL) {
 

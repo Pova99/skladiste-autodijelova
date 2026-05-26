@@ -9,47 +9,66 @@ static int parts_num = 0;
 
 void create_parts(FILE* fp, PART* p) {
 
-	if (p == NULL) {
-		
-		return;
-	}
+	int count = 0;
 
 	rewind(fp);
-	fread(&parts_num, sizeof(int), 1, fp);
-	parts_num++;
+
+	if (fread(&count, sizeof(int), 1, fp) != 1) {
+		count = 0;
+	}
+
+	count++;
 	rewind(fp);
-	fwrite(&parts_num, sizeof(int), 1, fp);
+	fwrite(&count, sizeof(int), 1, fp);
+
 	fseek(fp, 0, SEEK_END);
 	fwrite(p, sizeof(PART), 1, fp);
 }
 
-void* load_parts(FILE* fp) {
+PART* load_parts(FILE* fp) {
+
+	int count = 0;
 
 	rewind(fp);
-	fread(&parts_num, sizeof(int), 1, fp);
-	PART* p = (PART*)calloc(parts_num, sizeof(PART));
 
-	if (p == NULL) {
+	if (fread(&count, sizeof(int), 1, fp) != 1) {
 
-		perror("Zauzimanje memorije za dijelove!");
+		return NULL;
+	}
+
+	if (count <= 0) {
+
+		return NULL;
+	}
+
+	PART* p = calloc(count, sizeof(PART));
+
+	if (!p) {
+
+		perror("Calloc failed!");
 		exit(EXIT_FAILURE);
 	}
 
-	fread(p, sizeof(PART), parts_num, fp);
+	size_t read = fread(p, sizeof(PART), count, fp);
+
+	if (read != (size_t)count) {
+
+		free(p);
+		return NULL;
+	}
+
+	parts_num = count;
 
 	return p;
 }
 
-void read_parts(FILE* fp, PART* p) {
+void read_parts(PART* p) {
 	
 	if (p == NULL) {
 
 		printf("Datoteka 'parts.bin' je prazna");
 		return;
 	}
-
-	rewind(fp);
-	fread(&parts_num, sizeof(int), 1, fp);
 
 	printf("\n");
 	printf("Broj sveukupnih dijelova: %d\n", parts_num);
@@ -82,9 +101,6 @@ void* find_parts(FILE* fp, PART* p) {
 
 		if (!strcmp(find, (p + i)->catalog_number)) {
 
-			printf("\n");
-			format_print_parts(p + i);
-			printf("\n");
 			return (p + i);
 		}
 	}
@@ -206,7 +222,35 @@ void update_parts(FILE* fp, const char* catalog_number, PART* p) {
 	}
 }
 
-void delete_parts(FILE* fp, const char* catalog_number, int* num, PART* p) {
+void delete_parts(FILE* fp, PART* delete_p, PART* p) {
 
+	int new_num = 0;
 
+	FILE* temp = fopen(TEMP_BIN, "wb+");
+	if (!temp) {
+		perror("Temp file!");
+		exit(EXIT_FAILURE);
+	}
+
+	fwrite(&new_num, sizeof(int), 1, temp);
+
+	for (int i = 0; i < parts_num; i++) {
+
+		if (strcmp(delete_p->catalog_number, p[i].catalog_number) != 0) {
+
+			fwrite(&p[i], sizeof(PART), 1, temp);
+			new_num++;
+		}
+	}
+
+	rewind(temp);
+	fwrite(&new_num, sizeof(int), 1, temp);
+
+	fclose(fp);
+	fclose(temp);
+
+	remove(DAT_BIN);
+	rename(TEMP_BIN, DAT_BIN);
+
+	printf("Kataloski broj '%s' je obrisan!\n\n", *delete_p);
 }

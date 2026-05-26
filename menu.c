@@ -24,7 +24,6 @@ int menu(FILE* fp) {
 	int selection = 0;
 	printf("Odabir: ");
 	while (scanf("%d", &selection) != 1) while (getchar() != '\n');
-	if (!confirm_selection()) return 1;
 
 	switch (selection) {
 
@@ -55,6 +54,13 @@ int menu(FILE* fp) {
 
 			if (found_part == NULL) printf("Kataloski broj nije pronaden!\n\n");
 
+			else {
+
+				printf("\n");
+				format_print_parts(found_part);
+				printf("\n");
+			}
+
 			break;
 		}
 
@@ -69,16 +75,35 @@ int menu(FILE* fp) {
 		case 4: {
 
 			p = (PART*)secure_load_parts(fp, p);
-			read_parts(fp, p);
+			read_parts(p);
 
 			break;
 		}
 
 		case 5: {
+
+			p = (PART*)secure_load_parts(fp, p);
+			found_part = (PART*)find_parts(fp, p);
+
+			if (found_part == NULL) {
+
+				printf("Kataloski broj nije pronaden!\n\n");
+				break;
+			}
+
+			if (!confirm_selection()) return 1;
+
+			delete_parts(fp, found_part, p);
+
+			fopen(DAT_BIN, "rb+");
+			p = (PART*)secure_load_parts(fp, p);
+
 			break;
 		}
 
 		case 6: return 0;
+
+		default: printf("Krivi unos!\n");
 	}
 
 	return 1;
