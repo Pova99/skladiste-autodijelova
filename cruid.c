@@ -70,13 +70,34 @@ void read_parts(PART* p) {
 		return;
 	}
 
+	int selection = 0;
+
+	printf("Odaberite nacin prikaza:\n");
+	printf("\tOpacija 1: Sortirano po kataloskim brojevima.\n");
+	printf("\tOpacija 2: Sortirano po kategorijama.\n");
+	printf("\tOpacija 3: Sortirano po nazivu.\n");
+	printf("\tOpacija 4: Sortirano po proizvodacu.\n");
+	printf("\tOpacija 5: Sortirano po cijeni.\n");
+	printf("\tOpacija 6: Sortirano po kolicini.\n");
+	printf("\tOpacija 7: Ispisi odmah bez sortiranja.\n");
+
+	do {
+
+		printf("Odabir: ");
+
+		if (scanf("%d", &selection) != 1) {
+
+			while (getchar() != '\n');
+			selection = 0;
+		}
+
+		if (selection < 1 || selection > 7) printf("Pogresan unos!\n");
+
+	} while (selection < 1 || selection > 7);
+
 	printf("\n");
 	printf("Broj sveukupnih dijelova: %d\n", parts_num);
-
-	for (int i = 0; i < parts_num; i++) {
-
-		format_print_parts(p + i);
-	}
+	read_parts_sorted(p, parts_num, selection);
 	printf("\n");
 }
 

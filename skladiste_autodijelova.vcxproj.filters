@@ -27,6 +27,9 @@
     <ClCompile Include="functions_misc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sort_&amp;_search.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h">

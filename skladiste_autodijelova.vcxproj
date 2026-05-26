@@ -131,6 +131,7 @@
     <ClCompile Include="functions_misc.c" />
     <ClCompile Include="menu.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="sort_&amp;_search.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h" />

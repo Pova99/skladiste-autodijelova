@@ -10,15 +10,6 @@
 static char* filename = "parts.bin";
 
 typedef enum {
-    CATALOG_NUMBER,
-    NAME,
-    MANUFACTURER,
-    PRICE,
-    QUANTITY,
-    CATEGORY
-} DECISION;
-
-typedef enum {
     ENGINE,
     BRAKES,
     SUSPENSION,
@@ -52,3 +43,13 @@ PART* enter_parts_info();
 void format_print_parts(PART*);
 int confirm_selection();
 void* secure_load_parts(FILE*, PART*);
+void read_parts_sorted(PART p[], int, int);
+
+/* sort_&_search */
+void swap_parts(PART*, PART*);
+void sort_by_catalog_number(PART p[], int);
+void sort_by_name(PART p[], int);
+void sort_by_manufacturer(PART p[], int);
+void sort_by_price(PART p[], int);
+void sort_by_quantity(PART p[], int);
+void sort_by_category(PART p[], int);

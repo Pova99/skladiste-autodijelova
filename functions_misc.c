@@ -43,31 +43,31 @@ void format_print_parts(PART* p) {
 	switch (p->category) {
 
 		case ENGINE:
-			printf("ENGINE");
+			printf("%-12s | ", "ENGINE");
 			break;
 
 		case BRAKES:
-			printf("BRAKES");
+			printf("%-12s | ", "BRAKES");
 			break;
 
 		case SUSPENSION:
-			printf("SUSPENSION");
+			printf("%-12s | ", "SUSPENSION");
 			break;
 
 		case ELECTRICAL:
-			printf("ELECTRICAL");
+			printf("%-12s | ", "ELECTRICAL");
 			break;
 
 		case BODY:
-			printf("BODY");
+			printf("%-12s | ", "BODY");
 			break;
 
 		default:
-			printf("OTHER");
+			printf("%-12s | ", "OTHER");
 			break;
-	}
+		}
 
-	printf(" | %-40s | %-15s | %-8.2f | %-5d\n", p->name,
+	printf(" %-40s | %-15s | %-10.2f | %-5d\n", p->name,
 		p->manufacturer, p->price, p->quantity);
 }
 
@@ -101,9 +101,36 @@ void* secure_load_parts(FILE* fp, PART* p) {
 
 	if (p == NULL) {
 
-		printf("Datoteka 'parts.bin' je prazna!");
-		return;
+		perror("Zauzimanje memorije!");
+		exit(EXIT_FAILURE);
 	}
 
 	return p;
+}
+
+void read_parts_sorted(PART p[], int parts_num, int selection) {
+
+	switch (selection) {
+
+		case 1: sort_by_catalog_number(p, parts_num); break;
+
+		case 2: sort_by_category(p, parts_num); break;
+
+		case 3: sort_by_name(p, parts_num); break;
+
+		case 4: sort_by_manufacturer(p, parts_num); break;
+	
+		case 5: sort_by_price(p, parts_num); break;
+	
+		case 6: sort_by_quantity(p, parts_num); break;
+
+		case 7: break;
+
+		default: printf("Pogresan Unos!"); break;
+	}
+
+	for (int i = 0; i < parts_num; i++) {
+
+		format_print_parts(p + i);
+	}
 }
