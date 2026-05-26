@@ -75,7 +75,7 @@ int menu(FILE* fp) {
 		case 4: {
 
 			p = (PART*)secure_load_parts(fp, p);
-			read_parts(p);
+			read_parts(fp, p);
 
 			break;
 		}

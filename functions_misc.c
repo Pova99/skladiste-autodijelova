@@ -134,3 +134,13 @@ void read_parts_sorted(PART p[], int parts_num, int selection) {
 		format_print_parts(p + i);
 	}
 }
+
+void save_parts(FILE* fp, PART p[], int parts_num) {
+
+	rewind(fp);
+
+	fwrite(&parts_num, sizeof(int), 1, fp);
+	fwrite(p, sizeof(PART), parts_num, fp);
+
+	fflush(fp);
+}

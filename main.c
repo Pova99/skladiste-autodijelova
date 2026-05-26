@@ -4,12 +4,12 @@
 
 int main(void) {
 
-	FILE* fp = fopen(filename, "rb+");
+	FILE* fp = fopen(DAT_BIN, "rb+");
 
 	if (fp == NULL) {
 
 		int zero = 0;
-		fp = fopen(filename, "wb+");
+		fp = fopen(DAT_BIN, "wb+");
 		fwrite(&zero, sizeof(int), 1, fp);
 	}
 

@@ -62,7 +62,7 @@ PART* load_parts(FILE* fp) {
 	return p;
 }
 
-void read_parts(PART* p) {
+void read_parts(FILE* fp, PART* p) {
 	
 	if (p == NULL) {
 
@@ -71,6 +71,7 @@ void read_parts(PART* p) {
 	}
 
 	int selection = 0;
+	char decision[DECS_LEN] = { '\0' };
 
 	printf("Odaberite nacin prikaza:\n");
 	printf("\tOpacija 1: Sortirano po kataloskim brojevima.\n");
@@ -99,6 +100,22 @@ void read_parts(PART* p) {
 	printf("Broj sveukupnih dijelova: %d\n", parts_num);
 	read_parts_sorted(p, parts_num, selection);
 	printf("\n");
+
+	printf("Zelite li sortirani sadrzaj zapisati u '%s'? (y/n): ", DAT_BIN);
+	scanf("%3s", decision);
+	printf("\n");
+
+	for (int i = 0; decision[i]; i++) {
+		decision[i] = (char)tolower((unsigned char)decision[i]);
+	}
+
+	if (strcmp(decision, "n") == 0 || strcmp(decision, "no") == 0) {
+		return;
+	}
+	else {
+		save_parts(fp, p, parts_num);
+	}
+	
 }
 
 

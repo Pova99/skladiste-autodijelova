@@ -7,8 +7,6 @@
 #define TEMP_BIN "temp.bin"
 #define DECS_LEN 5
 
-static char* filename = "parts.bin";
-
 typedef enum {
     ENGINE,
     BRAKES,
@@ -33,7 +31,7 @@ int menu(FILE*);
 /* cruid */
 void create_parts(FILE*, PART*);
 PART* load_parts(FILE*);
-void read_parts(PART*);
+void read_parts(FILE*, PART*);
 void* find_parts(FILE*, PART*);
 void update_parts(FILE*, PART*);
 void delete_parts(FILE*, PART*, PART*);
@@ -44,6 +42,7 @@ void format_print_parts(PART*);
 int confirm_selection();
 void* secure_load_parts(FILE*, PART*);
 void read_parts_sorted(PART p[], int, int);
+void save_parts(FILE*, PART p[], int);
 
 /* sort_&_search */
 void swap_parts(PART*, PART*);
