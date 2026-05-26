@@ -75,18 +75,32 @@ int confirm_selection() {
 
 	char decision[DECS_LEN] = { '\0' };
 
-	printf("Jeste li sigurni da zelite nastaviti dalje? (y/n): ");
-	scanf("%3s", decision);
+	do {
 
-	for (int i = 0; decision[i]; i++) {
-		decision[i] = (char)tolower((unsigned char)decision[i]);
-	}
+		printf("Jeste li sigurni da zelite nastaviti dalje? (y/n): ");
+		scanf("%4s", decision);
 
-	if (strcmp(decision, "n") == 0 || strcmp(decision, "no") == 0) {
-		return 0;
-	}
+		for (int i = 0; decision[i]; i++) {
 
-	return 1;
+			decision[i] = (char)tolower((unsigned char)decision[i]);
+		}
+
+		if (strcmp(decision, "n") == 0 || strcmp(decision, "no") == 0) {
+
+			return 0;
+		}
+
+		else if (strcmp(decision, "y") == 0 || strcmp(decision, "yes") == 0) {
+
+			return 1;
+		}
+
+		else {
+
+			printf("Pogresan unos!\n");
+		}
+
+	} while (strcmp(decision, "n") || strcmp(decision, "no") || strcmp(decision, "y") || strcmp(decision, "yes"));
 }
 
 void* secure_load_parts(FILE* fp, PART* p) {
@@ -143,4 +157,50 @@ void save_parts(FILE* fp, PART p[], int parts_num) {
 	fwrite(p, sizeof(PART), parts_num, fp);
 
 	fflush(fp);
+}
+
+void search_sorted(PART p[], int parts_num, int selection, char* find) {
+
+	switch (selection) {
+
+	case 1: {
+	
+		sort_by_catalog_number(p, parts_num);
+		int index = binary_search_catalog_number(p, parts_num, find);
+
+		if (index != -1) {
+
+			printf("\n");
+			format_print_parts(&p[index]);
+			printf("\n");
+		}
+
+		else printf("Podatak ne postoji!\n\n");
+
+		break;
+	}
+		
+	case 2: search_category(p, parts_num, find);
+
+	case 3: search_name(p, parts_num, find); break;
+
+	case 4: search_manufacturer(p, parts_num, find); break;
+
+	default: printf("Pogresan Unos!"); break;
+	}
+}
+
+char* category_to_string(PART_CATEGORY c) {
+
+	switch (c) {
+
+	case ENGINE: return "Engine";
+	case BRAKES: return "Brakes";
+	case SUSPENSION: return "Suspension";
+	case ELECTRICAL: return "Electrical";
+	case BODY: return "Body";
+	case OTHER: return "Other";
+
+	default: return "Unknown";
+	}
 }

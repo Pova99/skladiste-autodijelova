@@ -8,15 +8,15 @@
 int menu(FILE* fp) {
 
 	printf("==============");
-	printf("Odaberite jednu od ponudenih opcija:");
-	printf("==============\n");
-	printf("\t\tOpcija 1: dodavanje dijelova!\n");
-	printf("\t\tOpcija 2: pretrazivanje dijelova!\n");
-	printf("\t\tOpcija 3: uredivanje dijelova!\n");
-	printf("\t\tOpcija 4: ispisivanje svih dijelova!\n");
-	printf("\t\tOpcija 5: brisanje dijelova!\n");
-	printf("\t\tOpcija 6: izlaz iz programa!\n");
-	printf("================================================================\n");
+	printf(" Odaberite jednu od ponudenih opcija: ");
+	printf("==============\n\n");
+	printf("\t\tOpcija 1: Dodavanje dijelova!\n");
+	printf("\t\tOpcija 2: Pretrazivanje dijelova!\n");
+	printf("\t\tOpcija 3: Uredivanje dijelova!\n");
+	printf("\t\tOpcija 4: Ispisivanje svih dijelova!\n");
+	printf("\t\tOpcija 5: Brisanje dijelova!\n");
+	printf("\t\tOpcija 6: Izlaz iz programa!\n\n");
+	printf("==================================================================\n");
 
 	static PART* p = NULL;
 	static PART* found_part = NULL;
@@ -31,8 +31,10 @@ int menu(FILE* fp) {
 
 			int num_create = 0;
 
-			printf("Koliko dijelova zelite dodati: ");
+			printf("Koliko dijelova zelite dodati (0 za povratak): ");
 			while (scanf("%d", &num_create) != 1) while (getchar() != '\n');
+
+			if (num_create == 0) break;
 
 			for (int i = 0; i < num_create; i++) {
 
@@ -50,16 +52,7 @@ int menu(FILE* fp) {
 		case 2: {
 
 			p = (PART*)secure_load_parts(fp, p);
-			found_part = (PART*)find_parts(fp, p);
-
-			if (found_part == NULL) printf("Kataloski broj nije pronaden!\n\n");
-
-			else {
-
-				printf("\n");
-				format_print_parts(found_part);
-				printf("\n");
-			}
+			find_parts(fp, p);
 
 			break;
 		}
@@ -83,7 +76,7 @@ int menu(FILE* fp) {
 		case 5: {
 
 			p = (PART*)secure_load_parts(fp, p);
-			found_part = (PART*)find_parts(fp, p);
+			found_part = (PART*)find_parts_to_delete(fp, p);
 
 			if (found_part == NULL) {
 

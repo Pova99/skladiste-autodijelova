@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <errno.h>
 #include "Header.h"
 
@@ -70,7 +71,7 @@ void read_parts(FILE* fp, PART* p) {
 		return;
 	}
 
-	int selection = 0;
+	int selection = -1;
 	char decision[DECS_LEN] = { '\0' };
 
 	printf("Odaberite nacin prikaza:\n");
@@ -84,13 +85,15 @@ void read_parts(FILE* fp, PART* p) {
 
 	do {
 
-		printf("Odabir: ");
+		printf("Odabir (0 za povratak): ");
 
 		if (scanf("%d", &selection) != 1) {
 
 			while (getchar() != '\n');
-			selection = 0;
+			selection = -1;
 		}
+
+		if (selection == 0) return;
 
 		if (selection < 1 || selection > 7) printf("Pogresan unos!\n");
 
@@ -101,25 +104,38 @@ void read_parts(FILE* fp, PART* p) {
 	read_parts_sorted(p, parts_num, selection);
 	printf("\n");
 
-	printf("Zelite li sortirani sadrzaj zapisati u '%s'? (y/n): ", DAT_BIN);
-	scanf("%3s", decision);
-	printf("\n");
 
-	for (int i = 0; decision[i]; i++) {
-		decision[i] = (char)tolower((unsigned char)decision[i]);
-	}
+	do {
 
-	if (strcmp(decision, "n") == 0 || strcmp(decision, "no") == 0) {
-		return;
-	}
-	else {
-		save_parts(fp, p, parts_num);
-	}
-	
+		printf("Zelite li sortirani sadrzaj zapisati u '%s'? (y/n): ", DAT_BIN);
+		scanf("%3s", decision);
+		printf("\n");
+
+		for (int i = 0; decision[i]; i++) {
+			decision[i] = (char)tolower((unsigned char)decision[i]);
+		}
+
+		if (strcmp(decision, "n") == 0 || strcmp(decision, "no") == 0) {
+
+			return;
+		}
+
+		else if (strcmp(decision, "y") == 0 || strcmp(decision, "yes") == 0) {
+
+			save_parts(fp, p, parts_num);
+			return;
+		}
+
+		else {
+
+			printf("Pogresan unos!\n");
+		}
+
+	} while (strcmp(decision, "n") || strcmp(decision, "no") || strcmp(decision, "y") || strcmp(decision, "yes"));
 }
 
 
-void* find_parts(FILE* fp, PART* p) {
+void find_parts(FILE* fp, PART* p) {
 
 	if (p == NULL) {
 
@@ -127,7 +143,49 @@ void* find_parts(FILE* fp, PART* p) {
 		return;
 	}
 
-	char find[CAT_LEN] = { 0 };
+	char find[CAT_LEN] = { '\0' };
+	int selection = -1;
+
+	rewind(fp);
+	fread(&parts_num, sizeof(int), 1, fp);
+
+	printf("Odaberite nacin pretrazivanja:\n");
+	printf("\tOpacija 1: Pretrazivanje po kataloskim brojevima.\n");
+	printf("\tOpacija 2: Pretrazivanje po kategorijama.\n");
+	printf("\tOpacija 3: Pretrazivanje po nazivu.\n");
+	printf("\tOpacija 4: Pretrazivanje po proizvodacu.\n");
+
+	do {
+
+		printf("Odabir (0 za povratak): ");
+
+		if (scanf("%d", &selection) != 1) {
+
+			while (getchar() != '\n');
+			selection = -1;
+		}
+
+		if (selection == 0) return;
+
+		if (selection < 1 || selection > 6) printf("Pogresan unos!\n");
+
+	} while (selection < 1 || selection > 6);
+
+	printf("Pretrazite: ");
+	scanf("%63s", find);
+
+	search_sorted(p, parts_num, selection, find);
+}
+
+void* find_parts_to_delete(FILE* fp, PART* p) {
+
+	if (p == NULL) {
+
+		printf("Datoteka 'parts.bin' je prazna!");
+		return;
+	}
+
+	char find[CAT_LEN] = { '\0' };
 
 	rewind(fp);
 	fread(&parts_num, sizeof(int), 1, fp);
@@ -135,12 +193,12 @@ void* find_parts(FILE* fp, PART* p) {
 	printf("Unesite kataloski broj: ");
 	scanf("%31s", find);
 
-	for (int i = 0; i < parts_num; i++) {
+	sort_by_catalog_number(p, parts_num);
+	int index = binary_search_catalog_number(p, parts_num, find);
 
-		if (!strcmp(find, (p + i)->catalog_number)) {
+	if (index != -1) {
 
-			return (p + i);
-		}
+		return (p + index);
 	}
 
 	return NULL;
@@ -158,8 +216,10 @@ void update_parts(FILE* fp, PART* p) {
 
 	char id[CAT_LEN] = { '\0' };
 
-	printf("Unesite kataloski broj: ");
+	printf("Unesite kataloski broj (0 za povratak): ");
 	scanf("%31s", id);
+
+	if (id == 0) return;
 
 	int num = 0;
 	fread(&num, sizeof(int), 1, fp);

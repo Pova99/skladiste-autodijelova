@@ -1,11 +1,2 @@
-﻿  cruid.c
-C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(109,23): warning C4013: 'tolower' undefined; assuming extern returning int
-C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(127,3): warning C4033: 'find_parts' must return a value
-C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(298,9): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'PART'
-  functions_misc.c
-  main.c
-  menu.c
-  sort_&_search.c
-  Generating Code...
-C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(147,1): warning C4715: 'find_parts': not all control paths return a value
+﻿  menu.c
   skladiste_autodijelova.vcxproj -> C:\Coding\skladiste_autodijelova\x64\Debug\skladiste_autodijelova.exe

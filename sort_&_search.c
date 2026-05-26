@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "Header.h"
 
 void swap_parts(PART* a, PART* b) {
@@ -110,5 +111,70 @@ void sort_by_category(PART p[], int n) {
 		}
 
 		swap_parts(&p[i], &p[min]);
+	}
+}
+
+int binary_search_catalog_number(PART p[], int parts_num, char* find) {
+
+	int ll = 0;
+	int ul = parts_num - 1;
+	int mid = -1;
+
+	while (ll <= ul) {
+
+		mid = (ll + ul) / 2;
+
+		int cmp = strcmp(p[mid].catalog_number, find);
+
+		if (cmp == 0) return mid;
+
+		else if (cmp > 0) ul = mid - 1;
+
+		else ll = mid + 1;
+	}
+	
+	return -1;
+}
+
+void search_name(PART p[], int parts_num, char* find) {
+
+	printf("\n");
+
+	for (int i = 0; i < parts_num; i++) {
+
+		if (strstr(p[i].name, find) != NULL) {
+			
+			format_print_parts(&p[i]);
+		}
+	}
+	printf("\n");
+}
+
+void search_manufacturer(PART p[], int parts_num, char* find) {
+
+	printf("\n");
+
+	for (int i = 0; i < parts_num; i++) {
+
+		if (strstr(p[i].manufacturer, find) != NULL) {
+
+			format_print_parts(&p[i]);
+		}
+	}
+	printf("\n");
+}
+
+void search_category(PART p[], int parts_num, char* find) {
+
+	printf("\n");
+
+	for (int i = 0; i < parts_num; i++) {
+
+		const char* cat_str = category_to_string(p[i].category);
+
+		if (strstr(cat_str, find) != NULL) {
+
+			format_print_parts(&p[i]);
+		}
 	}
 }

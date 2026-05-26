@@ -8,6 +8,11 @@
 #define DECS_LEN 5
 
 typedef enum {
+    CONTINUE,
+    RETURN_TO_MENU
+} STATUS;
+
+typedef enum {
     ENGINE,
     BRAKES,
     SUSPENSION,
@@ -32,7 +37,8 @@ int menu(FILE*);
 void create_parts(FILE*, PART*);
 PART* load_parts(FILE*);
 void read_parts(FILE*, PART*);
-void* find_parts(FILE*, PART*);
+void find_parts(FILE*, PART*);
+void* find_parts_to_delete(FILE*, PART*);
 void update_parts(FILE*, PART*);
 void delete_parts(FILE*, PART*, PART*);
 
@@ -43,6 +49,8 @@ int confirm_selection();
 void* secure_load_parts(FILE*, PART*);
 void read_parts_sorted(PART p[], int, int);
 void save_parts(FILE*, PART p[], int);
+void search_sorted(PART p[], int, int, char*);
+char* category_to_string(PART_CATEGORY);
 
 /* sort_&_search */
 void swap_parts(PART*, PART*);
@@ -52,3 +60,7 @@ void sort_by_manufacturer(PART p[], int);
 void sort_by_price(PART p[], int);
 void sort_by_quantity(PART p[], int);
 void sort_by_category(PART p[], int);
+int binary_search_catalog_number(PART p[], int, char*);
+void search_name(PART p[], int, char*);
+void search_manufacturer(PART p[], int, char*);
+void search_category(PART p[], int, char*);
