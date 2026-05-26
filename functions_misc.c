@@ -38,35 +38,36 @@ PART* enter_parts_info() {
 
 void format_print_parts(PART* p) {
 
-	printf("%-20s | ", p->catalog_number);
+	printf("%-15s | ", p->catalog_number);
 
 	switch (p->category) {
-	case ENGINE:
-		printf("ENGINE");
-		break;
 
-	case BRAKES:
-		printf("BRAKES");
-		break;
+		case ENGINE:
+			printf("ENGINE");
+			break;
 
-	case SUSPENSION:
-		printf("SUSPENSION");
-		break;
+		case BRAKES:
+			printf("BRAKES");
+			break;
 
-	case ELECTRICAL:
-		printf("ELECTRICAL");
-		break;
+		case SUSPENSION:
+			printf("SUSPENSION");
+			break;
 
-	case BODY:
-		printf("BODY");
-		break;
+		case ELECTRICAL:
+			printf("ELECTRICAL");
+			break;
 
-	default:
-		printf("OTHER");
-		break;
+		case BODY:
+			printf("BODY");
+			break;
+
+		default:
+			printf("OTHER");
+			break;
 	}
 
-	printf(" | %-20s | %-15s | %-8.2f | %-5d\n", p->name,
+	printf(" | %-40s | %-15s | %-8.2f | %-5d\n", p->name,
 		p->manufacturer, p->price, p->quantity);
 }
 

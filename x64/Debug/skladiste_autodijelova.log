@@ -1,5 +1,4 @@
-﻿  cruid.c
-C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(89,3): warning C4033: 'find_parts' must return a value
-C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(260,9): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'PART'
-C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(109,1): warning C4715: 'find_parts': not all control paths return a value
+﻿  functions_misc.c
+C:\Coding\skladiste_autodijelova\skladiste_autodijelova\functions_misc.c(105,3): warning C4033: 'secure_load_parts' must return a value
+C:\Coding\skladiste_autodijelova\skladiste_autodijelova\functions_misc.c(109,1): warning C4715: 'secure_load_parts': not all control paths return a value
   skladiste_autodijelova.vcxproj -> C:\Coding\skladiste_autodijelova\x64\Debug\skladiste_autodijelova.exe

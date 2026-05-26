@@ -8,8 +8,8 @@ int main(void) {
 
 	if (fp == NULL) {
 
-		fp = fopen(filename, "wb+");
 		int zero = 0;
+		fp = fopen(filename, "wb+");
 		fwrite(&zero, sizeof(int), 1, fp);
 	}
 
@@ -21,6 +21,7 @@ int main(void) {
 	}
 
 	fclose(fp);
+
 	printf("Zavrsetak programa!\n");
 
 	return 0;
