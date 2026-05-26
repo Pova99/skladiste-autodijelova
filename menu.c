@@ -101,7 +101,7 @@ int menu(FILE* fp) {
 			break;
 		}
 
-		case 6: return 0;
+		case 6: if (!confirm_selection()) return 1; return 0;
 
 		default: printf("Krivi unos!\n");
 	}

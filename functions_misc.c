@@ -100,7 +100,8 @@ void* secure_load_parts(FILE* fp, PART* p) {
 
 	if (p == NULL) {
 
-		exit(EXIT_FAILURE);
+		printf("Datoteka 'parts.bin' je prazna!");
+		return;
 	}
 
 	return p;

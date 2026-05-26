@@ -66,7 +66,7 @@ void read_parts(PART* p) {
 	
 	if (p == NULL) {
 
-		printf("Datoteka 'parts.bin' je prazna");
+		printf("Datoteka 'parts.bin' je prazna!");
 		return;
 	}
 
@@ -85,7 +85,7 @@ void* find_parts(FILE* fp, PART* p) {
 
 	if (p == NULL) {
 
-		printf("Datoteka 'parts.bin' je prazna");
+		printf("Datoteka 'parts.bin' je prazna!");
 		return;
 	}
 
@@ -108,7 +108,7 @@ void* find_parts(FILE* fp, PART* p) {
 	return NULL;
 }
 
-void update_parts(FILE* fp, const char* catalog_number, PART* p) {
+void update_parts(FILE* fp, PART* p) {
 
 	if (fp == NULL) {
 
@@ -118,12 +118,17 @@ void update_parts(FILE* fp, const char* catalog_number, PART* p) {
 
 	rewind(fp);
 
+	char id[CAT_LEN] = { '\0' };
+
+	printf("Unesite kataloski broj: ");
+	scanf("%31s", id);
+
 	int num = 0;
 	fread(&num, sizeof(int), 1, fp);
 
 	while (fread(p, sizeof(PART), 1, fp)) {
 
-		if (strcmp(p->catalog_number, catalog_number) == 0) {
+		if (strcmp(p->catalog_number, id) == 0) {
 
 			printf("\tOpcija 0: izmjena svih podataka!\n");
 			printf("\tOpcija 1: izmjena odredenog podatka!\n");
@@ -148,7 +153,7 @@ void update_parts(FILE* fp, const char* catalog_number, PART* p) {
 				case 1: {
 
 					printf("Izmjena podatka:\n");
-					printf("0 KATALOSKI BROJ, 1 NAZIV, 2 PROIZVODAC, 3 CIJENA, 4 KOLICINA, 5 KATEGORIJA\n");
+					printf("0 KATALOSKI BROJ, 1 KATEGORIJA, 2 NAZIV, 3 PROIZVODAC, 4 CIJENA, 5 KOLICINA\n");
 					printf("Odabir: ");
 					int decs = 0;
 					while (scanf("%d", &decs) != 1) while (getchar() != '\n');

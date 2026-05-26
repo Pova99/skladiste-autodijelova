@@ -36,7 +36,10 @@ typedef struct {
     PART_CATEGORY category;
 } PART;
 
+/* menu */
 int menu(FILE*);
+
+/* cruid */
 void create_parts(FILE*, PART*);
 PART* load_parts(FILE*);
 void read_parts(PART*);
@@ -44,7 +47,7 @@ void* find_parts(FILE*, PART*);
 void update_parts(FILE*, PART*);
 void delete_parts(FILE*, PART*, PART*);
 
-
+/* functions_misc */
 PART* enter_parts_info();
 void format_print_parts(PART*);
 int confirm_selection();
