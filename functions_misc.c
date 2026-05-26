@@ -11,7 +11,7 @@ PART* enter_parts_info() {
 	PART* p = (PART*)calloc(1, sizeof(PART));
 
 	printf("Unesite kataloski broj: ");
-	scanf("%31s", p->catalog_number);
+	scanf("%31s[^\n]", p->catalog_number);
 
 	printf("Unesite naziv: ");
 	scanf(" %63[^\n]", p->name);
@@ -20,40 +20,20 @@ PART* enter_parts_info() {
 	scanf(" %63[^\n]", p->manufacturer);
 
 	printf("Unesite cijenu: ");
-	if (scanf("%lf", &p->price) != 1) while (getchar() != '\n');
+	while (scanf("%lf", &p->price) != 1) while (getchar() != '\n');
 
 	printf("Unesite kolicinu: ");
-	if (scanf("%d", &p->quantity) != 1) while (getchar() != '\n');
+	while (scanf("%d", &p->quantity) != 1) while (getchar() != '\n');
 
 	printf("Kategorije:\n");
 	printf("0 ENGINE, 1 BRAKES, 2 SUSPENSION, 3 ELECTRICAL, 4 BODY, 5 OTHER\n");
 	printf("Unos kategorije: ");
 
 	int cat = 0;
-	if (scanf("%d", &cat) != 1) while (getchar() != '\n');
+	while (scanf("%d", &cat) != 1) while (getchar() != '\n');
 	p->category = (PART_CATEGORY)cat;
 
 	return p;
-}
-
-void print_engine_parts(FILE* fp, PART* p) {
-
-	rewind(fp);
-
-	printf("\n\t\t=== ENGINE PARTS ===\n");
-
-	while (fread(p, sizeof(PART), 1, fp) == 1) {
-
-		if (p->category == ENGINE) {
-
-			printf("Catalog: %s\n", p->catalog_number);
-			printf("Name: %s\n", p->name);
-			printf("Manufacturer: %s\n", p->manufacturer);
-			printf("Price: %.2f\n", p->price);
-			printf("Quantity: %d\n", p->quantity);
-			printf("----------------------\n");
-		}
-	}
 }
 
 void format_print_parts(PART* p) {
@@ -90,39 +70,9 @@ void format_print_parts(PART* p) {
 		p->manufacturer, p->price, p->quantity);
 }
 
-PART* get_all_data(FILE* fp, int* num) {
-
-	if (fp == NULL) {
-		perror("Datoteka ne postoji!");
-		return NULL;
-	}
-
-	rewind(fp);
-
-	if (fread(num, sizeof(int), 1, fp) != 1) {
-		printf("Datoteka '%s' je prazna!\n", filename);
-		return NULL;
-	}
-
-	PART* p = calloc(*num, sizeof(PART));
-
-	if (p == NULL) {
-		perror("Zauzimanje memorije!");
-		return NULL;
-	}
-
-	if (fread(p, sizeof(PART), *num, fp) != *num) {
-		perror("Greska pri citanju podataka!");
-		free(p);
-		return NULL;
-	}
-
-	return p;
-}
-
 int confirm_selection() {
 
-	char decision[DECS_LEN] = { 0 };
+	char decision[DECS_LEN] = { '\0' };
 
 	printf("Jeste li sigurni da zelite nastaviti dalje? (y/n): ");
 	scanf("%3s", decision);
@@ -136,4 +86,22 @@ int confirm_selection() {
 	}
 
 	return 1;
+}
+
+void* secure_load_parts(FILE* fp, PART* p) {
+
+	if (p != NULL) {
+
+		free(p);
+		p = NULL;
+	}
+
+	p = (PART*)load_parts(fp);
+
+	if (p == NULL) {
+
+		exit(EXIT_FAILURE);
+	}
+
+	return p;
 }

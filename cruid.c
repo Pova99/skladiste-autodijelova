@@ -5,70 +5,91 @@
 #include <errno.h>
 #include "Header.h"
 
-void create_parts(FILE* fp, PART* p, int* num) {
+static int parts_num = 0;
 
-	if (fp == NULL) {
+void create_parts(FILE* fp, PART* p) {
 
-		perror("Datoteka ne postoji!");
+	if (p == NULL) {
+		
 		return;
 	}
 
 	rewind(fp);
-
-	if (fread(num, sizeof(int), 1, fp) != 1) {
-
-		*num = 0;
-	}
-
-	(*num)++;
+	fread(&parts_num, sizeof(int), 1, fp);
+	parts_num++;
 	rewind(fp);
-	fwrite(num, sizeof(int), 1, fp);
+	fwrite(&parts_num, sizeof(int), 1, fp);
 	fseek(fp, 0, SEEK_END);
 	fwrite(p, sizeof(PART), 1, fp);
 }
 
+void* load_parts(FILE* fp) {
+
+	rewind(fp);
+	fread(&parts_num, sizeof(int), 1, fp);
+	PART* p = (PART*)calloc(parts_num, sizeof(PART));
+
+	if (p == NULL) {
+
+		perror("Zauzimanje memorije za dijelove!");
+		exit(EXIT_FAILURE);
+	}
+
+	fread(p, sizeof(PART), parts_num, fp);
+
+	return p;
+}
+
 void read_parts(FILE* fp, PART* p) {
 	
-	if (fp == NULL) {
+	if (p == NULL) {
 
-		perror("Datoteka ne postoji!");
+		printf("Datoteka 'parts.bin' je prazna");
 		return;
 	}
 
-
 	rewind(fp);
-
-	int num = 0;
-	fread(&num, sizeof(int), 1, fp);
+	fread(&parts_num, sizeof(int), 1, fp);
 
 	printf("\n");
-	while (fread(p, sizeof(PART), 1, fp)) {
+	printf("Broj sveukupnih dijelova: %d\n", parts_num);
 
-		format_print_parts(p);
+	for (int i = 0; i < parts_num; i++) {
+
+		format_print_parts(p + i);
 	}
 	printf("\n");
-
 }
 
-PART* find_part(FILE* fp, const char* id, PART* p) {
+
+void* find_parts(FILE* fp, PART* p) {
+
+	if (p == NULL) {
+
+		printf("Datoteka 'parts.bin' je prazna");
+		return;
+	}
+
+	char find[CAT_LEN] = { '\0' };
 
 	rewind(fp);
+	fread(&parts_num, sizeof(int), 1, fp);
 
-	int num = 0;
-	fread(&num, sizeof(int), 1, fp);
+	printf("Unesite kataloski broj: ");
+	scanf("%31s", find);
 
-	while (fread(p, sizeof(PART), 1, fp)) {
+	for (int i = 0; i < parts_num; i++) {
 
-		if (strcmp(p->catalog_number, id) == 0) {
-			
+		if (!strcmp(find, (p + i)->catalog_number)) {
+
 			printf("\n");
 			format_print_parts(p);
 			printf("\n");
-			return 1;
+			return (p + i);
 		}
 	}
 
-	return 0;
+	return NULL;
 }
 
 void update_parts(FILE* fp, const char* catalog_number, PART* p) {
@@ -99,83 +120,83 @@ void update_parts(FILE* fp, const char* catalog_number, PART* p) {
 
 			switch (selection) {
 
-			case 0: {
-
-				PART* new_part = enter_parts_info();
-				temp = *new_part;
-				free(new_part);
-
-				break;
-			}
-			case 1: {
-
-				printf("Izmjena podatka:\n");
-				printf("0 KATALOSKI BROJ, 1 NAZIV, 2 PROIZVODAC, 3 CIJENA, 4 KOLICINA, 5 KATEGORIJA\n");
-				printf("Odabir: ");
-				int decs = 0;
-				if (scanf("%d", &decs) != 1) while (getchar() != '\n');
-
-				switch (decs) {
-
 				case 0: {
 
-					printf("Unesite novi kataloski broj: ");
-					scanf("%31s", temp.catalog_number);
+					PART* new_part = enter_parts_info();
+					temp = *new_part;
+					free(new_part);
 
 					break;
 				}
 
 				case 1: {
 
-					printf("Unesite novi naziv: ");
-					scanf(" %63[^\n]", temp.name);
+					printf("Izmjena podatka:\n");
+					printf("0 KATALOSKI BROJ, 1 NAZIV, 2 PROIZVODAC, 3 CIJENA, 4 KOLICINA, 5 KATEGORIJA\n");
+					printf("Odabir: ");
+					int decs = 0;
+					if (scanf("%d", &decs) != 1) while (getchar() != '\n');
 
-					break;
-				}
+					switch (decs) {
 
-				case 2: {
+						case 0: {
 
-					printf("Unesite novog proizvodaca: ");
-					scanf(" %63[^\n]", temp.manufacturer);
+							printf("Unesite novi kataloski broj: ");
+							scanf("%31s", temp.catalog_number);
 
-					break;
-				}
+							break;
+						}
 
-				case 3: {
+						case 1: {
 
-					printf("Unesite novu cijenu: ");
-					if (scanf("%lf", &temp.price) != 1) while (getchar() != '\n');
+							printf("Kategorije:\n");
+							printf("0 ENGINE, 1 BRAKES, 2 SUSPENSION, 3 ELECTRICAL, 4 BODY, 5 OTHER\n");
+							printf("Unos kategorije: ");
 
-					break;
-				}
+							int cat = 0;
+							if (scanf("%d", &cat) != 1) while (getchar() != '\n');
+							temp.category = (PART_CATEGORY)cat;
 
-				case 4: {
+							break;
+						}
 
-					printf("Unesite novu kolicinu: ");
-					if (scanf("%d", &temp.quantity) != 1) while (getchar() != '\n');
+						case 2: {
 
-					break;
-				}
+							printf("Unesite novi naziv: ");
+							scanf(" %63[^\n]", temp.name);
 
-				case 5: {
+							break;
+						}
 
-					printf("Kategorije:\n");
-					printf("0 ENGINE, 1 BRAKES, 2 SUSPENSION, 3 ELECTRICAL, 4 BODY, 5 OTHER\n");
-					printf("Unos kategorije: ");
+						case 3: {
 
-					int cat = 0;
-					if (scanf("%d", &cat) != 1) while (getchar() != '\n');
-					temp.category = (PART_CATEGORY)cat;
+							printf("Unesite novog proizvodaca: ");
+							scanf(" %63[^\n]", temp.manufacturer);
 
-					break;
-				}
-					break;
-				}
+							break;
+						}
+
+						case 4: {
+
+							printf("Unesite novu cijenu: ");
+							if (scanf("%lf", &temp.price) != 1) while (getchar() != '\n');
+
+							break;
+						}
+
+						case 5: {
+
+							printf("Unesite novu kolicinu: ");
+							if (scanf("%d", &temp.quantity) != 1) while (getchar() != '\n');
+
+							break;
+						}
+							break;
+					}
 				
-			}
+				}
 
-			default: printf("Pogresan unos!\n"); break;
-
+				default: printf("Pogresan unos!\n"); break;
 			}
 
 			fseek(fp, -(long)sizeof(PART), SEEK_CUR);
@@ -187,21 +208,5 @@ void update_parts(FILE* fp, const char* catalog_number, PART* p) {
 
 void delete_parts(FILE* fp, const char* catalog_number, int* num, PART* p) {
 
-	FILE* temp = fopen(TEMP_BIN, "wb");
 
-	rewind(fp);
-
-	while (fread(p, sizeof(PART), 1, fp)) {
-
-		if (strcmp(p->catalog_number, catalog_number) != 0) {
-
-			fwrite(p, sizeof(PART), 1, temp);
-		}
-	}
-
-	fclose(fp);
-	fclose(temp);
-
-	remove(DAT_BIN);
-	rename(TEMP_BIN, DAT_BIN);
 }

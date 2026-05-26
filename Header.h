@@ -37,14 +37,15 @@ typedef struct {
 } PART;
 
 int menu(FILE*);
-void create_parts(FILE*, PART*, int*);
+void create_parts(FILE*, PART*);
+void* load_parts(FILE*);
 void read_parts(FILE*, PART*);
-void update_parts(FILE*, const char*, PART*);
-void delete_parts(FILE*, const char*, PART*);
-PART* find_part(FILE*, const char*, PART*);
+void* find_parts(FILE*, PART*);
+void update_parts(FILE*, PART*);
+void delete_parts(const char*, PART*);
+
 
 PART* enter_parts_info();
-void print_engine_parts(FILE*, PART*);
 void format_print_parts(PART*);
-PART* get_all_data(FILE* fp, int*);
 int confirm_selection();
+void* secure_load_parts(FILE*, PART*);

@@ -1,5 +1,9 @@
 ﻿  cruid.c
-C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(67,4): warning C4047: 'return': 'PART *' differs in levels of indirection from 'int'
-C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(188,62): warning C4028: formal parameter 3 different from declaration
-C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(188,6): warning C4029: declared formal parameter list different from definition
+C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(70,3): warning C4033: 'find_parts' must return a value
+C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(95,41): warning C4028: formal parameter 2 different from declaration
+C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(95,6): warning C4029: declared formal parameter list different from definition
+C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(209,25): warning C4028: formal parameter 1 different from declaration
+C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(209,41): warning C4028: formal parameter 2 different from declaration
+C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(209,6): warning C4029: declared formal parameter list different from definition
+C:\Coding\skladiste_autodijelova\skladiste_autodijelova\cruid.c(93,1): warning C4715: 'find_parts': not all control paths return a value
   skladiste_autodijelova.vcxproj -> C:\Coding\skladiste_autodijelova\x64\Debug\skladiste_autodijelova.exe
