@@ -42,6 +42,7 @@ int menu(FILE* fp) {
 				PART* p = enter_parts_info();
 				create_parts(fp, p);
 				free(p);
+				printf("\n");
 			}
 
 			break;
@@ -52,7 +53,7 @@ int menu(FILE* fp) {
 			p = (PART*)secure_load_parts(fp, p);
 			found_part = (PART*)find_parts(fp, p);
 
-			if (found_part == NULL) printf("Kataloski broj nije pronaden!\n");
+			if (found_part == NULL) printf("Kataloski broj nije pronaden!\n\n");
 
 			break;
 		}

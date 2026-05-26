@@ -70,7 +70,7 @@ void* find_parts(FILE* fp, PART* p) {
 		return;
 	}
 
-	char find[CAT_LEN] = { '\0' };
+	char find[CAT_LEN] = { 0 };
 
 	rewind(fp);
 	fread(&parts_num, sizeof(int), 1, fp);
@@ -83,7 +83,7 @@ void* find_parts(FILE* fp, PART* p) {
 		if (!strcmp(find, (p + i)->catalog_number)) {
 
 			printf("\n");
-			format_print_parts(p);
+			format_print_parts(p + i);
 			printf("\n");
 			return (p + i);
 		}
@@ -114,7 +114,7 @@ void update_parts(FILE* fp, const char* catalog_number, PART* p) {
 
 			int selection = 0;
 			printf("Odabir: ");
-			if (scanf("%d", &selection) != 1) while (getchar() != '\n');
+			while (scanf("%d", &selection) != 1) while (getchar() != '\n');
 
 			PART temp = *p;
 
@@ -135,7 +135,7 @@ void update_parts(FILE* fp, const char* catalog_number, PART* p) {
 					printf("0 KATALOSKI BROJ, 1 NAZIV, 2 PROIZVODAC, 3 CIJENA, 4 KOLICINA, 5 KATEGORIJA\n");
 					printf("Odabir: ");
 					int decs = 0;
-					if (scanf("%d", &decs) != 1) while (getchar() != '\n');
+					while (scanf("%d", &decs) != 1) while (getchar() != '\n');
 
 					switch (decs) {
 
@@ -154,7 +154,7 @@ void update_parts(FILE* fp, const char* catalog_number, PART* p) {
 							printf("Unos kategorije: ");
 
 							int cat = 0;
-							if (scanf("%d", &cat) != 1) while (getchar() != '\n');
+							while (scanf("%d", &cat) != 1) while (getchar() != '\n');
 							temp.category = (PART_CATEGORY)cat;
 
 							break;
@@ -179,7 +179,7 @@ void update_parts(FILE* fp, const char* catalog_number, PART* p) {
 						case 4: {
 
 							printf("Unesite novu cijenu: ");
-							if (scanf("%lf", &temp.price) != 1) while (getchar() != '\n');
+							while (scanf("%lf", &temp.price) != 1) while (getchar() != '\n');
 
 							break;
 						}
@@ -187,7 +187,7 @@ void update_parts(FILE* fp, const char* catalog_number, PART* p) {
 						case 5: {
 
 							printf("Unesite novu kolicinu: ");
-							if (scanf("%d", &temp.quantity) != 1) while (getchar() != '\n');
+							while (scanf("%d", &temp.quantity) != 1) while (getchar() != '\n');
 
 							break;
 						}
