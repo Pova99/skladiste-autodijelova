@@ -4,32 +4,33 @@
 #include <string.h>
 #include <errno.h>
 #include "Header.h"
+#include <ctype.h>
 
 PART* enter_parts_info() {
 
 	PART* p = (PART*)calloc(1, sizeof(PART));
 
 	printf("Unesite kataloski broj: ");
-	scanf("%32s", p->catalog_number);
+	scanf("%31s", p->catalog_number);
 
 	printf("Unesite naziv: ");
-	scanf(" %[^\n]", p->name);
+	scanf(" %63[^\n]", p->name);
 
 	printf("Unesite proizvodaca: ");
-	scanf(" %[^\n]", p->manufacturer);
+	scanf(" %63[^\n]", p->manufacturer);
 
 	printf("Unesite cijenu: ");
-	scanf("%lf", &p->price);
+	if (scanf("%lf", &p->price) != 1) while (getchar() != '\n');
 
 	printf("Unesite kolicinu: ");
-	scanf("%d", &p->quantity);
+	if (scanf("%d", &p->quantity) != 1) while (getchar() != '\n');
 
 	printf("Kategorije:\n");
 	printf("0 ENGINE, 1 BRAKES, 2 SUSPENSION, 3 ELECTRICAL, 4 BODY, 5 OTHER\n");
 	printf("Unos kategorije: ");
 
 	int cat = 0;
-	scanf("%d", &cat);
+	if (scanf("%d", &cat) != 1) while (getchar() != '\n');
 	p->category = (PART_CATEGORY)cat;
 
 	return p;
@@ -89,30 +90,50 @@ void format_print_parts(PART* p) {
 		p->manufacturer, p->price, p->quantity);
 }
 
-FILE* get_all_data(FILE* fp, int* num) {
+PART* get_all_data(FILE* fp, int* num) {
 
 	if (fp == NULL) {
-
 		perror("Datoteka ne postoji!");
-		return;
+		return NULL;
 	}
-	else {
 
-		rewind(fp);
-		fread(num, sizeof(int), 1, fp);
+	rewind(fp);
 
-		PART* p = (PART*)calloc(*num, sizeof(PART));
-
-		if (p == NULL) {
-
-			free(p);
-			perror("Zauzimanje memorije!");
-			exit(EXIT_FAILURE);
-		}
-		else {
-
-			fread(p, sizeof(PART), *num, fp);
-			return p;
-		}
+	if (fread(num, sizeof(int), 1, fp) != 1) {
+		printf("Datoteka '%s' je prazna!\n", filename);
+		return NULL;
 	}
+
+	PART* p = calloc(*num, sizeof(PART));
+
+	if (p == NULL) {
+		perror("Zauzimanje memorije!");
+		return NULL;
+	}
+
+	if (fread(p, sizeof(PART), *num, fp) != *num) {
+		perror("Greska pri citanju podataka!");
+		free(p);
+		return NULL;
+	}
+
+	return p;
+}
+
+int confirm_selection() {
+
+	char decision[DECS_LEN] = { 0 };
+
+	printf("Jeste li sigurni da zelite nastaviti dalje? (y/n): ");
+	scanf("%3s", decision);
+
+	for (int i = 0; decision[i]; i++) {
+		decision[i] = (char)tolower((unsigned char)decision[i]);
+	}
+
+	if (strcmp(decision, "n") == 0 || strcmp(decision, "no") == 0) {
+		return 0;
+	}
+
+	return 1;
 }

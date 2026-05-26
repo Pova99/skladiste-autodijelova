@@ -29,21 +29,44 @@ int menu(FILE* fp) {
 
 	case 1: {
 
-		PART* p = enter_parts_info();
-		create_parts(fp, p, &num);
+		if (!confirm_selection()) {
+
+			break;
+		}
+
+		printf("Koliko dijelova zelite dodati: ");
+		int num_create = 0;
+		if (scanf("%d", &num_create) != 1) while (getchar() != '\n');
+
+		for (int i = 0; i < num_create; i++) {
+
+			printf("-------UNOS %d#-------\n", i + 1);
+			PART* p = enter_parts_info();
+			create_parts(fp, p, &num);
+
+
+		}
+
 		if (p != NULL) {
 
 			free(p);
 		}
+
 		break;
 	}
 		  
 	case 2: {
-		
+
+		if (!confirm_selection()) {
+
+			break;
+		}
+
 		char search[CAT_LEN] = { 0 };
 
 		printf("Pretrazivanje: ");
 		scanf("%31s", search);
+
 
 		p = get_all_data(fp, &num);
 
@@ -51,18 +74,61 @@ int menu(FILE* fp) {
 
 		if (!found) {
 
-			printf("Kataloski broj '%s' ne postoji u bazi podataka!", search);
+			printf("Kataloski broj '%s' ne postoji u bazi podataka!\n", search);
 		}
-	}
 
-	case 3: ; break;
-	case 4: {
-	
-		read_parts(fp, p);
+		free(p);
+
 		break;
 	}
-	case 5:; break;
-	case 6: return 0;
 
+	case 3: {
+
+		if (!confirm_selection()) {
+
+			break;
+		}
+		
+		char catalog_number[CAT_LEN] = { 0 };
+
+		printf("Unesite kataloski broj: ");
+		scanf("%31s", catalog_number);
+
+		p = get_all_data(fp, &num);
+		update_parts(fp, catalog_number, p);
+
+		break;
 	}
+
+	case 4: {
+
+		if (!confirm_selection()) {
+
+			break;
+		}
+
+		p = get_all_data(fp, &num);
+
+		if (p == NULL) {
+
+			break;
+		}
+		read_parts(fp, p);
+		free(p);
+
+		break;
+	}
+
+	case 5:; break;
+
+	case 6: 
+
+		if (!confirm_selection()) {
+
+			break;
+		};
+		return 0;
+	}
+
+	return 1;
 }

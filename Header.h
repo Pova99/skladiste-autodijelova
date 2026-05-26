@@ -5,8 +5,18 @@
 #define MANU_LEN 64
 #define DAT_BIN "parts.bin"
 #define TEMP_BIN "temp.bin"
+#define DECS_LEN 5
 
 static char* filename = "parts.bin";
+
+typedef enum {
+    CATALOG_NUMBER,
+    NAME,
+    MANUFACTURER,
+    PRICE,
+    QUANTITY,
+    CATEGORY
+} DECISION;
 
 typedef enum {
     ENGINE,
@@ -36,4 +46,5 @@ PART* find_part(FILE*, const char*, PART*);
 PART* enter_parts_info();
 void print_engine_parts(FILE*, PART*);
 void format_print_parts(PART*);
-FILE* get_all_data(FILE* fp, int*);
+PART* get_all_data(FILE* fp, int*);
+int confirm_selection();
