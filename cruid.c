@@ -355,5 +355,5 @@ void delete_parts(FILE* fp, PART* delete_p, PART* p) {
 	remove(DAT_BIN);
 	rename(TEMP_BIN, DAT_BIN);
 
-	printf("Kataloski broj '%s' je obrisan!\n\n", *delete_p);
+	printf("Kataloski broj '%s' je obrisan!\n\n", delete_p->catalog_number);
 }
