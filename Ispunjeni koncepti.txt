@@ -1,0 +1,358 @@
+1.
+CREATE:
+	FILE* fp = fopen(DAT_BIN, "rb+");
+
+	if (fp == NULL) {
+
+		int zero = 0;
+		fp = fopen(DAT_BIN, "wb+");
+		fwrite(&zero, sizeof(int), 1, fp);
+	}
+
+READ:
+	PART* load_parts(FILE* fp) {
+
+	int count = 0;
+
+	rewind(fp);
+
+	if (fread(&count, sizeof(int), 1, fp) != 1) {
+
+		return NULL;
+	}
+
+	if (count <= 0) {
+
+		return NULL;
+	}
+
+	PART* p = calloc(count, sizeof(PART));
+
+UPDATE:
+	int num = 0;
+	fread(&num, sizeof(int), 1, fp);
+
+	while (fread(p, sizeof(PART), 1, fp)) {
+		
+		... PART temp = *p;
+	fseek(fp, -(long)sizeof(PART), SEEK_CUR);
+	fwrite(&temp, sizeof(PART), 1, fp);
+	return;
+
+INSERT:
+	
+	int count = 0;
+
+	rewind(fp);
+
+	if (fread(&count, sizeof(int), 1, fp) != 1) {
+		count = 0;
+	}
+
+	count++;
+	rewind(fp);
+	fwrite(&count, sizeof(int), 1, fp);
+
+	fseek(fp, 0, SEEK_END);
+	fwrite(p, sizeof(PART), 1, fp);
+
+DELETE:
+	fwrite(&new_num, sizeof(int), 1, temp);
+
+	for (int i = 0; i < parts_num; i++) {
+
+		if (strcmp(delete_p->catalog_number, p[i].catalog_number) != 0) {
+
+			fwrite(&p[i], sizeof(PART), 1, temp);
+			new_num++;
+		}
+	}
+
+	rewind(temp);
+	fwrite(&new_num, sizeof(int), 1, temp);
+
+	fclose(fp);
+	fclose(temp);
+
+	remove(DAT_BIN);
+	rename(TEMP_BIN, DAT_BIN);
+
+2.
+#define CAT_LEN 32
+#define NAME_LEN 64
+#define MANU_LEN 64
+#define DAT_BIN "parts.bin"
+#define TEMP_BIN "temp.bin"
+#define DECS_LEN 5
+
+3.
+typedef struct {
+	char catalog_number[CAT_LEN];
+	char name[NAME_LEN];
+	char manufacturer[MANU_LEN];
+	double price;
+	int quantity;
+	PART_CATEGORY category;
+} PART;
+
+4.
+typedef enum {
+	CONTINUE,
+	RETURN_TO_MENU
+} STATUS;
+
+typedef enum {
+	ENGINE,
+	BRAKES,
+	SUSPENSION,
+	ELECTRICAL,
+	BODY,
+	OTHER
+} PART_CATEGORY;
+
+typedef struct {
+	char catalog_number[CAT_LEN];
+	char name[NAME_LEN];
+	char manufacturer[MANU_LEN];
+	double price;
+	int quantity;
+	PART_CATEGORY category;
+} PART;
+
+5.
+void create_parts(FILE*, PART*);
+PART* load_parts(FILE*);
+void read_parts(FILE*, PART*);
+char catalog_number[CAT_LEN];
+
+6.
+static PART* p = NULL;
+static PART* found_part = NULL
+
+7.
+sortirano u 5 C fileova i 1 header file
+
+8.
+static int parts_num = 0;
+
+9.
+if (cmp == 0) return mid;
+
+else if (cmp > 0) ul = mid - 1;
+
+else ll = mid + 1;
+
+10.
+	printf("==============");
+	printf(" Odaberite jednu od ponudenih opcija: ");
+	printf("==============\n\n");
+	printf("\t\tOpcija 1: Dodavanje dijelova!\n");
+	printf("\t\tOpcija 2: Pretrazivanje dijelova!\n");
+	printf("\t\tOpcija 3: Uredivanje dijelova!\n");
+	printf("\t\tOpcija 4: Ispisivanje svih dijelova!\n");
+	printf("\t\tOpcija 5: Brisanje dijelova!\n");
+	printf("\t\tOpcija 6: Izlaz iz programa!\n\n");
+	printf("==================================================================\n");
+
+	printf("Odaberite nacin prikaza:\n");
+	printf("\tOpacija 1: Sortirano po kataloskim brojevima.\n");
+	printf("\tOpacija 2: Sortirano po kategorijama.\n");
+	printf("\tOpacija 3: Sortirano po nazivu.\n");
+	printf("\tOpacija 4: Sortirano po proizvodacu.\n");
+	printf("\tOpacija 5: Sortirano po cijeni.\n");
+	printf("\tOpacija 6: Sortirano po kolicini.\n");
+	printf("\tOpacija 7: Ispisi odmah bez sortiranja.\n");
+...
+
+11.
+typedef enum {
+	CONTINUE,
+	RETURN_TO_MENU
+} STATUS;
+
+12.
+PART* enter_parts_info();
+void format_print_parts(PART*);
+int confirm_selection();
+void* secure_load_parts(FILE*, PART*);
+
+13.
+typedef enum {
+	ENGINE,
+	BRAKES,
+	SUSPENSION,
+	ELECTRICAL,
+	BODY,
+	OTHER
+} PART_CATEGORY;
+
+typedef struct {
+	char catalog_number[CAT_LEN];
+	char name[NAME_LEN];
+	char manufacturer[MANU_LEN];
+	double price;
+	int quantity;
+	PART_CATEGORY category;
+} PART;
+
+14.
+void* secure_load_parts(FILE* fp, PART* p) {
+
+	if (p != NULL) {
+
+		free(p);
+		p = NULL;
+	}
+
+	p = load_parts(fp);
+
+	if (p == NULL) {
+
+		perror("Zauzimanje memorije!");
+		exit(EXIT_FAILURE);
+	}
+
+	return p;
+}
+
+15.
+	char catalog_number[CAT_LEN];
+	char name[NAME_LEN];
+	char manufacturer[MANU_LEN];
+
+16.
+PART* load_parts(FILE* fp) {
+
+	int count = 0;
+
+	rewind(fp);
+
+	if (fread(&count, sizeof(int), 1, fp) != 1) {
+
+		return NULL;
+	}
+
+	if (count <= 0) {
+
+		return NULL;
+	}
+
+	PART* p = calloc(count, sizeof(PART));
+
+	if (!p) {
+
+		perror("Calloc failed!");
+		exit(EXIT_FAILURE);
+	}
+
+	size_t read = fread(p, sizeof(PART), count, fp);
+
+	if (read != (size_t)count) {
+
+		free(p);
+		return NULL;
+	}
+
+	parts_num = count;
+
+	return p;
+}
+
+17.
+PART* p = calloc(count, sizeof(PART));
+
+18.
+void* secure_load_parts(FILE* fp, PART* p) {
+
+	if (p != NULL) {
+
+		free(p);
+		p = NULL;
+	}
+
+	p = load_parts(fp);
+
+	if (p == NULL) {
+
+		perror("Zauzimanje memorije!");
+		exit(EXIT_FAILURE);
+	}
+
+	return p;
+}
+
+19.
+#define DAT_BIN "parts.bin"
+
+20.
+rewind(fp);
+fwrite(&count, sizeof(int), 1, fp);
+
+fseek(fp, 0, SEEK_END);
+fwrite(p, sizeof(PART), 1, fp);
+
+21.
+remove(DAT_BIN);
+rename(TEMP_BIN, DAT_BIN);
+
+22.
+	PART* p = calloc(count, sizeof(PART));
+
+	if (!p) {
+
+		perror("Calloc failed!");
+		exit(EXIT_FAILURE);
+	}
+
+23.
+void sort_by_catalog_number(PART p[], int);
+void sort_by_name(PART p[], int);
+void sort_by_manufacturer(PART p[], int);
+void sort_by_price(PART p[], int);
+void sort_by_quantity(PART p[], int);
+void sort_by_category(PART p[], int);
+
+	for (int i = 0; i < n - 1; i++) {
+
+		int min = i;
+
+		for (int j = i + 1; j < n; j++) {
+
+			if (strcmp(p[j].catalog_number, p[min].catalog_number) < 0) {
+				min = j;
+			}
+		}
+
+		swap_parts(&p[i], &p[min]);
+	}
+
+
+24.
+int binary_search_catalog_number(PART p[], int, char*);
+void search_name(PART p[], int, char*);
+void search_manufacturer(PART p[], int, char*);
+void search_category(PART p[], int, char*);
+
+	while (ll <= ul) {
+
+		mid = (ll + ul) / 2;
+
+		int cmp = strcmp(p[mid].catalog_number, find);
+
+		if (cmp == 0) return mid;
+
+		else if (cmp > 0) ul = mid - 1;
+
+		else ll = mid + 1;
+	}
+
+25.
+int binary_search_catalog_number(PART p[], int, char*)
+
+26.
+void* secure_load_parts(FILE*, PART*);
+char* category_to_string(PART_CATEGORY);
+PART* load_parts(FILE*)
+void* find_parts_to_delete(FILE*, PART*);
+
+
